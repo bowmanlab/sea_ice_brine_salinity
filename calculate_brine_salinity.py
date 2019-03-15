@@ -28,7 +28,13 @@ navigate to it from command line, and execute.
 from time import localtime, strftime
 
 S_brine=250 #salinity of brine used for melting
+output_file='/Users/Jeff/Documents/deming_lab/Antarctica/sample_volumes_test.txt'
+
 print("your currently selected brine salinity is", S_brine)
+print("your output file is", output_file)
+
+## Gather some information from the user.
+
 print("Enter T")
 T=float(input('T=')) #temp
 print("Enter bulk salinity")
@@ -38,7 +44,7 @@ M=float(input('Mass=')) #sample mass
 print("Enter sample ID")
 sample_ID=(input('Sample ID=')) #input the ID of the sample
 
-#Determine brine salinity for temperature indicated
+## Determine brine salinity for temperature indicated.
 
 if 0>T>=-2:
     brine_salinity=-3.9921-22.7*T-1.0015*pow(T,2)-0.019956*pow(T,3)
@@ -47,7 +53,9 @@ elif -2>T>-23:
 elif T<=-23:
     brine_salinity=206.24-1.8907*T-0.060868*pow(T,2)-0.001024*pow(T,3)
 
-#Determine target salinity, either user defined or isohaline
+## Determine target salinity, either user defined or isohaline.
+    
+print_out = True
 
 print("Enter target salinity, enter iso for isohaline melt")
 S_target=input('target salinity=')
@@ -55,8 +63,6 @@ if S_target=="iso":
     S_target=brine_salinity
 else:
     S_target=float(S_target)
-
-output=open('/Users/Jeff/Documents/deming_lab/Antarctica/sample_volumes_test.txt', "a")
 
 if 0>T>=-2:
     density_ice=0.917-0.0001403*T
@@ -69,9 +75,6 @@ if 0>T>=-2:
     V_brine=(V_ice*(S-S_target))/(S_target-S_brine) #volume of melting brine added
     dilution_factor=(V_brine+V_ice)/V_ice
     time=strftime("%d %b %Y %H:%M:%S", localtime())
-    print("brine salinity is", brine_salinity)
-    print("add", V_brine, "L to reach", S_target, "ppt in final melt")
-    print(time, sample_ID, T, S, M, brine_salinity, conc_factor, V_ice, V_brine, dilution_factor, file=output)
 
 elif -2>T>-23:
     density_ice=0.917-0.0001403*T
@@ -84,9 +87,6 @@ elif -2>T>-23:
     V_brine=(V_ice*(S-S_target))/(S_target-S_brine) #volume of melting brine added
     dilution_factor=(V_brine+V_ice)/V_ice
     time=strftime("%d %b %Y %H:%M:%S", localtime())
-    print("brine salinity is", brine_salinity)
-    print("add", V_brine, "L to reach", S_target, "ppt in final melt")
-    print(time, sample_ID, T, S, M, brine_salinity, conc_factor, V_ice, V_brine, dilution_factor, file=output)
 
 elif T<=-23:
     density_ice=0.917-0.0001403*T
@@ -99,12 +99,15 @@ elif T<=-23:
     V_brine=(V_ice*(S-S_target))/(S_target-S_brine) #volume of melting brine added
     dilution_factor=(V_brine+V_ice)/V_ice
     time=strftime("%d %b %Y %H:%M:%S", localtime())
-    print("brine salinity is", brine_salinity)
-    print("add", V_brine, "L to reach", S_target, "ppt in final melt")
-    print(time, sample_ID, T, S, M, brine_salinity, conc_factor, V_ice, V_brine, dilution_factor, file=output)
 
 else:
     print("Temperature is out of range")
-    
-output.close()
+    print_out = False
+
+if print_out == True:    
+    with open(output_file, 'a') as file_out:
+        print("brine salinity is", brine_salinity)
+        print("add", V_brine, "L to reach", S_target, "ppt in final melt")
+        print(time, sample_ID, T, S, M, brine_salinity, conc_factor, V_ice, V_brine, dilution_factor, file=file_out)
+
 
