@@ -21,7 +21,7 @@ volume added, dilution factor.
 
 To run the program you should have python installed.  Place this file with 
 your other executables and execute from command line, or place in any directory,
-navigate to it from command line, and execute.
+navigate to it from command line, and execute. 
 
 """
 
